@@ -1,0 +1,3 @@
+RANK = 256
+N_TOP = 20
+N_STEPS = 20
