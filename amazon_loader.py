@@ -4,11 +4,13 @@ import requests
 import pandas as pd
 from ast import literal_eval
 
+# Reader of Amazon data
 def amazon_data_reader(path):
     with gzip.open(path, 'rt') as gz:
         for line in gz:
             yield literal_eval(line)
 
+# Download and read data to dataframe
 def get_amazon_data(json_filename = 'reviews_Electronics_5.json.gz',
                     url_json = 'http://snap.stanford.edu/data/amazon/productGraph/categoryFiles/reviews_Electronics_5.json.gz'):
     

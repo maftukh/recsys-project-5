@@ -2,6 +2,7 @@ import numpy as np
 import warnings 
 import pandas as pd
 
+# Generate random user subset of original data
 def get_random_user_subset(data, size, unique_users=None):
     if unique_users is None:
         unique_users = data['userid'].unique()
@@ -11,6 +12,7 @@ def get_random_user_subset(data, size, unique_users=None):
     
     return data
 
+# Sort data by chronological
 def get_chronological_sorted_data(data):
     # change user and item ids to be indexed in chronological order
     user_ids = data.sort_values('timestamp')['userid'].unique()
@@ -23,6 +25,7 @@ def get_chronological_sorted_data(data):
     
     return data
 
+# Split data on base-future parts
 def base_future_split(data, base_size=0.5):
     ts_base = data['timestamp'].quantile(base_size)
 
@@ -39,6 +42,7 @@ def base_future_split(data, base_size=0.5):
     )
     return data_base, data_future
 
+# Get holdout from subset
 def get_holdout_subset(data_base, data_future):
     # get first interaction for each user in validation set
     data_holdout = data_future.drop_duplicates(subset='userid', keep='first')
@@ -55,6 +59,7 @@ def get_holdout_subset(data_base, data_future):
         
     return data_holdout
 
+# Split future subsets on folds
 def get_future_subsets(data_future, n_steps=20):
     ts_min, ts_max = data_future['timestamp'].min(), data_future['timestamp'].max() + 1
     checkpoints = np.linspace(ts_min, ts_max, n_steps + 1)
@@ -73,9 +78,11 @@ def get_future_subsets(data_future, n_steps=20):
     
     return splits, start_times, stop_times
 
+# Update (concatenate) data
 def get_updated_base(data_base, data_future):
     return pd.concat([data_base, data_future])
 
+# Split data on train/val/test sets
 def train_test_val_split(data, train_size=0.5, test_size=0.2):
     assert train_size < 1 - test_size, "test data should not overlap train data"
 

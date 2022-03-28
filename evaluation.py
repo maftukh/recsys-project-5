@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-
+# Evaluate model metrics
 def model_evaluate(recommended_items, holdout, holdout_description, topn=10, to_return=['HR', 'MRR', 'coverage']):
     itemid = holdout_description['items']
     holdout_items = holdout[itemid].values
@@ -39,17 +39,17 @@ def model_evaluate(recommended_items, holdout, holdout_description, topn=10, to_
         
     return metrics
 
-
+# Get best simple recommendations
 def simple_model_recom_func(scores, topn=10):
     recommendations = np.apply_along_axis(topidx, 1, scores, topn)
     return recommendations
 
-
+# Get best recommendations indexes
 def topidx(a, topn):
     parted = np.argpartition(a, -topn)[-topn:]
     return parted[np.argsort(-a[parted])]
 
-
+# Downvote already seen items
 def downvote_seen_items(scores, data, data_description):
     itemid = data_description['items']
     userid = data_description['users']
